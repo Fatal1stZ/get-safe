@@ -1,0 +1,19 @@
+.Form-wrapper {
+    display: grid;
+    gap: 15px;
+    justify-items: center;
+}
+
+.Field-wrapper {
+    display: grid;
+    gap: 5px;
+}
+
+.Field-title {
+    color: #163c2c
+}
+
+.Field-error {
+    color: #ff0000
+}
+
