@@ -1,0 +1,27 @@
+.Summary-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+dl {
+    text-align: start;
+}
+
+dt {
+    color: #163c2c;
+    margin: 0;
+    padding: 5px 0;
+    width: 150px;
+    float: left;
+    clear: both;
+}
+
+dt:after {
+    content: ":";
+}
+
+dd {
+    margin: 0 0 0 150px;
+    padding: 5px 0;
+}

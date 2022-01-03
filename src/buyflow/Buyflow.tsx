@@ -1,42 +1,50 @@
-import React, { useState } from 'react'
-import AgeStep from './AgeStep'
-import EmailStep from './EmailStep'
-import SummaryStep from './SummaryStep'
+import React, { createContext, FC, useCallback, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { ProductIds } from '../types'
+import { BUYFLOW_CONFIG, PRODUCT_IDS_TO_NAMES } from '../config'
+import { NotFound } from '../components'
 
-interface BuyflowProps {
+interface IPageParams {
   productId: ProductIds
 }
 
-export enum ProductIds {
-  devIns = 'dev_ins',
+interface IBuyflowContext {
+  values: Record<string, any>
+  goNextStep: (values: Record<string, any>) => void
 }
 
-const PRODUCT_IDS_TO_NAMES = {
-  [ProductIds.devIns]: 'Developer Insurance',
-}
+export const BuyflowContext = createContext<IBuyflowContext>({
+  values: {},
+  goNextStep: () => {},
+})
 
-const Buyflow: React.FC<BuyflowProps> = (props) => {
-  const [currentStep, setStep] = useState('email')
-  const [collectedData, updateData] = useState({
-    email: '',
-    age: 0,
-  })
-  const getStepCallback = (nextStep: string) => (field: string, value: any) => {
-    updateData({ ...collectedData, [field]: value })
-    setStep(nextStep)
-  }
+export const Buyflow: FC = () => {
+  const { productId } = useParams<IPageParams>()
+  const [firstStep] = BUYFLOW_CONFIG[productId] ?? []
+  const [values, setValues] = useState({})
+  const [currentStep, setCurrentStep] = useState(firstStep)
+  const CurrentStep = currentStep?.component || NotFound
+
+  const setNextStep = useCallback(() => {
+    const currentStepIndex = BUYFLOW_CONFIG[productId].findIndex(
+      ({ key }) => currentStep.key === key
+    )
+    const nextStep = BUYFLOW_CONFIG[productId][currentStepIndex + 1]
+    setCurrentStep(nextStep)
+  }, [currentStep, productId])
+
+  const goNextStep = useCallback(
+    (values) => {
+      setValues((prevValues) => ({ ...prevValues, ...values }))
+      setNextStep()
+    },
+    [setNextStep]
+  )
+
   return (
-    <>
-      <h4>Buying {PRODUCT_IDS_TO_NAMES[props.productId]}</h4>
-      {(currentStep === 'email' && <EmailStep cb={getStepCallback('age')} />) ||
-        (currentStep === 'age' && (
-          <AgeStep cb={getStepCallback('summary')} />
-        )) ||
-        (currentStep === 'summary' && (
-          <SummaryStep collectedData={collectedData} />
-        ))}
-    </>
+    <BuyflowContext.Provider value={{ values, goNextStep }}>
+      <h4>Buying {PRODUCT_IDS_TO_NAMES[productId]}</h4>
+      <CurrentStep />
+    </BuyflowContext.Provider>
   )
 }
-
-export default Buyflow

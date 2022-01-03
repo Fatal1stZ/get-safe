@@ -1,23 +1,31 @@
 import React from 'react'
 import logo from './logo.svg'
 import './App.css'
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
-import Buyflow, { ProductIds } from './buyflow/Buyflow'
+import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom'
+import { Buyflow } from './buyflow'
+import { ProductIds } from './types'
 
 const App = () => {
   return (
     <Router>
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+          <Link to={'/'}>
+            <img src={logo} className="App-logo" alt="logo" />
+          </Link>
         </header>
         <Switch>
-          <Route path="/buy/insurance_dev">
-            <Buyflow productId={ProductIds.devIns} />
+          <Route path="/buy/:productId">
+            <Buyflow />
           </Route>
           <Route path="/">
-            <p>Welcome to Getsafe's Developer Insurance</p>
-            <Link to="/buy/insurance_dev">Get started!</Link>
+            <p>Welcome to Getsafe's Insurance</p>
+            <Link className="App-link" to={`/buy/${ProductIds.devIns}`}>
+              Get started (Developer)!
+            </Link>
+            <Link className="App-link" to={`/buy/${ProductIds.designerIns}`}>
+              Get started (Designer)!
+            </Link>
           </Route>
         </Switch>
       </div>
