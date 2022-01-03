@@ -41,10 +41,8 @@ export const Buyflow: FC = () => {
     [setNextStep]
   )
 
-  console.log('render', { currentStep, firstStep })
-
   return (
-    <BuyflowContext.Provider value={{ values: values, goNextStep }}>
+    <BuyflowContext.Provider value={{ values, goNextStep }}>
       <h4>Buying {PRODUCT_IDS_TO_NAMES[productId]}</h4>
       <CurrentStep />
     </BuyflowContext.Provider>

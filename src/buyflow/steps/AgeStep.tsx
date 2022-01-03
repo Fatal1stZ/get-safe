@@ -11,7 +11,7 @@ export const AgeStep: FC = () => {
   const { goNextStep } = useContext(BuyflowContext)
   return (
     <Form onSubmit={goNextStep} defaultValues={{ age: 0 }} validationSchema={schema}>
-      <Field name={'age'} title={'Age'} />
+      <Field name={'age'} title={'Age'} data-testid={'age'} />
       <button type={'submit'}>Next</button>
     </Form>
   )

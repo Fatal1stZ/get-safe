@@ -26,7 +26,7 @@ export const Form: FC<IForm> = ({
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)} className={'Form-wrapper'}>
+      <form onSubmit={handleSubmit(onSubmit)} className={'Form-wrapper'} data-testid={'form'}>
         {Children.map(children, (child) =>
           child?.props?.name
             ? createElement(child.type, { ...child.props, key: child.props.name })
